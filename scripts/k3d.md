@@ -57,9 +57,9 @@ To enable the automatic injection of Envoy sidecar proxies, run the following:
 kubectl label namespace default istio-injection=enabled
 ```
 
-## Deploy Demo Distributed System
+## Install Istio tools
 
-Download and extract samples:
+Download and extract :
 
 ```sh
 ISTIO_VERSION=1.10.0
@@ -68,32 +68,6 @@ curl -L $ISTIO_URL | tar xz
 cd istio-$ISTIO_VERSION
 ```
 
-```sh
-kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
-kubectl get services
-kubectl get pods
-```
-
-## Verify Demo System
-
-```sh
-kubectl exec "$(kubectl get pod -l app=ratings \
-  -o jsonpath='{.items[0].metadata.name}')" -c ratings \
-  -- curl -sS productpage:9080/productpage | grep -o "<title>.*</title>"
-```
-
-## Open Outside Traffic
-
-```sh
-kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
-istioctl analyze
-```
-
-Open in browser:
-
-```sh
-open http://localhost/productpage
-```
 
 ## Install Tracing Utilities
 
@@ -120,8 +94,6 @@ Uninstall Istio:
 
 ```sh
 kubectl delete -f samples/addons
-kubectl delete -f samples/bookinfo/networking/bookinfo-gateway.yaml
-kubectl delete -f samples/bookinfo/platform/kube/bookinfo.yaml
 istioctl x uninstall --purge
 kubectl delete namespace istio-system
 kubectl label namespace default istio-injection-
