@@ -14,13 +14,13 @@ sudo curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | 
 ## Deploy Multi-Node Cluster
 
 ```sh
-sudo k3d cluster create cluster1
-  --servers 1
-  --agents 3
-  --port 9443:443@loadbalancer
-  --port 80:80@loadbalancer
-  --port '32036:32036@server:0'
-  --api-port 6443
+k3d cluster create cluster1 \
+  --servers 1 \
+  --agents 3 \
+  --port 9443:443@loadbalancer \
+  --port 80:80@loadbalancer \
+  --port '32036:32036@server:0' \
+  --api-port 6443 \
   --k3s-arg '--disable=traefik@server:*'
 
 ```
