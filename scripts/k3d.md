@@ -30,6 +30,37 @@ kubectl get pods -A
 kubectl get services -A
 ```
 
+## Install Kubernetes Dashboard
+
+Deploying the Kubernetes Dashboard:
+```sh
+GITHUB_URL=https://github.com/kubernetes/dashboard/releases
+VERSION_KUBE_DASHBOARD=$(curl -w '%{url_effective}' -I -L -s -S ${GITHUB_URL}/latest -o /dev/null | sed -e 's|.*/||')
+k3s kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/${VERSION_KUBE_DASHBOARD}/aio/deploy/recommended.yaml
+```
+Add admin user:
+```sh
+kubectl create serviceaccount admin-user -n kubernetes-dashboard
+```
+Add admin user role:
+```sh
+kubectl create clusterrolebinding admin-user --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:admin-user
+```
+Create token:
+```sh
+kubectl -n kubernetes-dashboard create token admin-user
+```
+Create a secure channel to your K3s cluster:
+```sh
+kubectl proxy
+```
+Open dashboard:
+```sh
+xgd-open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
+```
+*Sign In* with the *admin-user* Bearer Token.
+
+
 ## Install Istio
 
 Istio install profiles.
