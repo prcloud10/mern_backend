@@ -14,7 +14,7 @@ sudo curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | 
 ## Deploy Multi-Node Cluster
 
 ```sh
-k3d cluster create bob --servers 1 --agents 3 \
+k3d cluster create cluster1 --servers 1 --agents 3 \
   --port 9443:443@loadbalancer \
   --port 80:80@loadbalancer \
   --port '32036:32036@server[0]' \
@@ -102,5 +102,5 @@ kubectl label namespace default istio-injection-
 Delete k3d/k3s cluster:
 
 ```sh
-k3d cluster delete bob
+k3d cluster delete cluster1
 ```
