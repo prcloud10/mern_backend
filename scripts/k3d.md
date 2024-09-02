@@ -4,11 +4,9 @@
 
 Ensure `docker`, `k3d` and `istioctl` installed.
 
-```sh
-brew update
-brew install --cask docker
-brew install k3d istioctl
-```
+wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+curl -sL https://istio.io/downloadIstioctl | sh -
+export PATH=$HOME/.istioctl/bin:$PATH
 
 Versions in use:
 
