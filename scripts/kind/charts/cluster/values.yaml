@@ -1,7 +1,0 @@
-# Default values
-controllers: 1
-workers: 1
-hostname: "bootstrap"
-k8version: "v1.22.3"
-ip: "10.166.240.217"
-interfacename: "{{ .DefaultNetworkInterfaceName }}"
