@@ -4,30 +4,10 @@
 
 Ensure `docker`, `k3d` and `istioctl` installed.
 
+```sh
 wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 curl -sL https://istio.io/downloadIstioctl | sh -
 export PATH=$HOME/.istioctl/bin:$PATH
-
-Versions in use:
-
-```sh
-$ docker version
-Client:
- Cloud integration: 1.0.14
- Version:           20.10.6
-
-Server: Docker Engine - Community
- Engine:
-  Version:          20.10.6
-  API version:      1.41 (minimum version 1.12)
-
-$ k3d version
-k3d version v4.4.4
-
-$ istioctl version
-client version: 1.10.0
-control plane version: 1.10.0
-data plane version: 1.10.0 (8 proxies)
 ```
 
 ## Deploy Multi-Node Cluster
