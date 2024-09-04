@@ -15,6 +15,7 @@ sudo curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | 
 
 ```sh
 k3d cluster create cluster1 \
+  --registry-create k3d-registry.localhost:12345 \
   --servers 1 \
   --agents 3 \
   --port 9443:443@loadbalancer \
@@ -28,6 +29,7 @@ k3d cluster create cluster1 \
 ## Probe New Cluster
 
 ```sh
+docker push k3d-registry.localhost:12345/nginx:latest
 docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Ports}}'
 kubectl get nodes
 kubectl get ns
