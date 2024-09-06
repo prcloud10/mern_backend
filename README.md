@@ -1,1 +1,9 @@
-# mern_backend
+### Todo
+
+- [ ] Registry UI
+- [ ] MongoDB
+- [ ] K8 Ingress
+
+
+
+

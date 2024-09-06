@@ -15,4 +15,5 @@ FROM gcr.io/distroless/static AS final
 LABEL maintainer="luis"
 USER nonroot:nonroot
 COPY --from=build --chown=nonroot:nonroot /main /main
+EXPOSE 8080
 ENTRYPOINT ["/main"]
