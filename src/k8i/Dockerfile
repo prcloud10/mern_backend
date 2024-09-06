@@ -7,12 +7,12 @@ WORKDIR /src
 COPY ./go.mod ./go.sum ./
 RUN go mod download
 COPY ./ ./
-RUN CGO_ENABLED=0 go build -installsuffix 'static' -o /app ./main.go
+RUN CGO_ENABLED=0 go build -installsuffix 'static' -o /main ./main.go
  
 
 
 FROM gcr.io/distroless/static AS final
 LABEL maintainer="luis"
 USER nonroot:nonroot
-COPY --from=build --chown=nonroot:nonroot /app /app
-ENTRYPOINT ["/app"]
+COPY --from=build --chown=nonroot:nonroot /main /main
+ENTRYPOINT ["/main"]

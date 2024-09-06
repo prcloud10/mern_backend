@@ -25,6 +25,8 @@ func int32Ptr(i int32) *int32 { return &i }
 
 func getApi(cr *gin.Context) {
 
+	log.Println("getApi request received")
+
 	//CORS
 	cr.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 	cr.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
@@ -32,10 +34,32 @@ func getApi(cr *gin.Context) {
 	cr.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
 
 	cr.JSON(http.StatusOK, gin.H{
-		"Name":    "APIGW",
+		"Name":    "K8i",
 		"Version": "0.1",
 		"Date":    time.Now().String(),
 	})
+}
+
+func getHealth(cr *gin.Context) {
+
+	//CORS
+	cr.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	cr.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+	cr.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+	cr.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+
+	cr.JSON(http.StatusOK, gin.H{})
+}
+
+func getReadiness(cr *gin.Context) {
+
+	//CORS
+	cr.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	cr.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+	cr.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+	cr.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+
+	cr.JSON(http.StatusOK, gin.H{})
 }
 
 func getList(cr *gin.Context) {
@@ -89,9 +113,11 @@ func main() {
 	v1 := router.Group("/")
 	{
 		v1.GET("/api", getApi)
+		v1.GET("/health", getHealth)
+		v1.GET("/readiness", getReadiness)
 		v1.GET("/list", getList)
 	}
 
-	log.Println("APIGW running on", httpaddress)
+	log.Println("K8i running on", httpaddress)
 	router.Run(httpaddress)
 }

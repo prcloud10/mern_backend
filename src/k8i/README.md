@@ -12,21 +12,13 @@ go version
 ```
 
 
-## Build
+## Build and push to Registry
 
 ```sh
-docker build . -t app
-
+docker build . -t k8i
+docker tag k8i:latest k3d-registry.localhost:12345/k8i:latest
+docker push k3d-registry.localhost:12345/k8i:latest
 ```
-Output:
-Sending build context to Docker daemon   29.7kB
-Step 1/13 : ARG GO_VERSION=1.23.0
-Step 2/13 : FROM golang:${GO_VERSION}-alpine AS build
- ---> d0c638dc5c33
-Step 3/13 : RUN apk add --no-cache git
- ---> Running in f4cfb62e3308
-
-
 
 
 ## Deploy to Cluster
