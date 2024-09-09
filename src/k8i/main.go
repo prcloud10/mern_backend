@@ -112,6 +112,7 @@ func main() {
 	router := gin.Default()
 	v1 := router.Group("/")
 	{
+		v1.GET("/", getApi)
 		v1.GET("/k8i/api", getApi)
 		v1.GET("/k8i/health", getHealth)
 		v1.GET("/k8i/readiness", getReadiness)

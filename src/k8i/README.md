@@ -20,6 +20,10 @@ docker tag k8i:latest k3d-registry.localhost:12345/k8i:v0.1
 docker push k3d-registry.localhost:12345/k8i:v0.1
 ```
 
+## Give permission RBAC inside cluster
+kubectl create clusterrolebinding default-view --clusterrole=view --serviceaccount=default:default
+
+
 
 ## Deploy to Cluster
 
