@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	httpaddress = ":8080"
+	httpaddress = ":80"
 )
 
 func int32Ptr(i int32) *int32 { return &i }
@@ -112,10 +112,10 @@ func main() {
 	router := gin.Default()
 	v1 := router.Group("/")
 	{
-		v1.GET("/api", getApi)
-		v1.GET("/health", getHealth)
-		v1.GET("/readiness", getReadiness)
-		v1.GET("/list", getList)
+		v1.GET("/k8i/api", getApi)
+		v1.GET("/k8i/health", getHealth)
+		v1.GET("/k8i/readiness", getReadiness)
+		v1.GET("/k8i/list", getList)
 	}
 
 	log.Println("K8i running on", httpaddress)

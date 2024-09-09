@@ -15,22 +15,22 @@ spec:
     spec:                        # Spec for the container which will run in the Pod
       containers:
       - name: k8i
-        image: k3d-registry.localhost:12345/k8i:latest 
+        image: k3d-registry.localhost:12345/k8i:v0.2
         imagePullPolicy: IfNotPresent
         ports:
-          - containerPort: 8080  # Should match the port number that the Go application listens on
+          - containerPort: 80  # Should match the port number that the Go application listens on
         livenessProbe:           # To check the health of the Pod
           httpGet:
-            path: /health
-            port: 8080
+            path: /k8i/health
+            port: 80
             scheme: HTTP
           initialDelaySeconds: 5
           periodSeconds: 15
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
-            path: /readiness
-            port: 8080
+            path: /k8i/readiness
+            port: 80
             scheme: HTTP
           initialDelaySeconds: 5
           timeoutSeconds: 1
@@ -44,4 +44,22 @@ spec:
     - name: http
       protocol: TCP
       port: 80
-      targetPort: 8080
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8i
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /k8i/api/
+        pathType: Exact
+        backend:
+          service:
+            name: k8i
+            port:
+              number: 80
