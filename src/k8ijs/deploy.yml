@@ -2,26 +2,26 @@
 apiVersion: apps/v1
 kind: Deployment                # Type of Kubernetes resource
 metadata:
-  name: k8i                     # Name of the Kubernetes resource
+  name: k8ijs                     # Name of the Kubernetes resource
 spec:
   replicas: 1                   # Number of pods to run at any given time
   selector:
     matchLabels:
-      app: k8i                  # This deployment applies to any Pods matching the specified label
+      app: k8ijs                  # This deployment applies to any Pods matching the specified label
   template:                      # This deployment will create a set of pods using the configurations in this template
     metadata:
       labels:                    # The labels that will be applied to all of the pods in this deployment
-        app: k8i
+        app: k8ijs
     spec:                        # Spec for the container which will run in the Pod
       containers:
-      - name: k8i
-        image: k3d-registry.localhost:12345/k8i:v0.3
+      - name: k8ijs
+        image: k3d-registry.localhost:12345/k8ijs:v0.5
         imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 80  # Should match the port number that the Go application listens on
         livenessProbe:           # To check the health of the Pod
           httpGet:
-            path: /k8i/health
+            path: /k8ijs/health
             port: 80
             scheme: HTTP
           initialDelaySeconds: 5
@@ -29,7 +29,7 @@ spec:
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
-            path: /k8i/readiness
+            path: /k8ijs/readiness
             port: 80
             scheme: HTTP
           initialDelaySeconds: 5
@@ -38,9 +38,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: k8i
+  name: k8ijs
   labels:
-    app: k8i
+    app: k8ijs
 spec:
   ports:
     - name: http
@@ -48,7 +48,7 @@ spec:
       port: 80
       targetPort: 80
   selector:
-    app: k8i
+    app: k8ijs
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -60,10 +60,17 @@ spec:
   rules:
   - http:
       paths:
-      - path: /k8i/api
+      - path: /k8ijs/api
         pathType: Prefix
         backend:
           service:
-            name: k8i
+            name: k8ijs
+            port:
+              number: 80
+      - path: /k8ijs/list
+        pathType: Prefix
+        backend:
+          service:
+            name: k8ijs
             port:
               number: 80
