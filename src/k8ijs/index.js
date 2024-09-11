@@ -18,13 +18,12 @@ app.get('/k8ijs/api', (req, res) => {
 
     let apiversion = {
         "Name":    "K8ijs",
-        "Version": "0.1",
+        "Version": "0.9",
         "Date":    Date().toString(),
     }
 
     res.json(apiversion);
 });
-
 
 
 app.get('/k8ijs/list', async (req, res) => {
@@ -37,8 +36,10 @@ app.get('/k8ijs/list', async (req, res) => {
     try {
         console.log(`/list request .... getting info`);
         const podsRes = await k8sApi.listNamespacedPod(namespace);
-        console.log(`${namespace} namespace pods: `, res.body);
-        res.status(200).send("OK");
+        const itemsK8s = podsRes.body.items;
+        var itemK8sJSON = JSON.stringify(itemsK8s);
+        console.log(itemK8sJSON);
+        res.json(itemK8sJSON)
     } catch (err) {
         console.error(err);
         res.status(204).send('')

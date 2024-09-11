@@ -15,7 +15,7 @@ spec:
     spec:                        # Spec for the container which will run in the Pod
       containers:
       - name: k8ijs
-        image: k3d-registry.localhost:12345/k8ijs:v0.5
+        image: k3d-registry.localhost:12345/k8ijs:v0.9
         imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 80  # Should match the port number that the Go application listens on
