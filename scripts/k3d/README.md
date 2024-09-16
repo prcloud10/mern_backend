@@ -11,13 +11,41 @@ export PATH=$HOME/.istioctl/bin:$PATH
 sudo curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 ```
 
-## Deploy Multi-Node Cluster
+## Prerequisites for CUDA
+
+Install NVIDIA Container Toolkit.
+
+Build a new k3d image with the following changes: 
+
+  1. Change the base images to nvidia/cuda:12.4.1-base-ubuntu22.04 so the NVIDIA Container Toolkit can be installed. 
+  2. Add a manifest for the NVIDIA driver plugin for Kubernetes with an added RuntimeClass definition. 
+
+
+Then build k3d cuda image and create the cluster with it.
 
 ```sh
-k3d registry create registry.localhost --port 12345
+cd scripts/k3d
+./build.sh
+k3d cluster create <clustername> --image=$IMAGE --gpus=1 ...........
+```
+
+
+
+## Deploy Multi-Node Cluster
+
+First create ked-managed registry:
+```sh
+k3d registry create registry.localhost --port 5000
+```
+
+then create cluster with cuda image:
+
+```sh
 k3d cluster create cluster1 \
-  --registry-use k3d-registry.localhost:12345 \
-  --agents 2 \
+  --image=$IMAGE \
+  --gpus=1 \
+  --registry-use k3d-registry.localhost:5000 \
+  --agents 1 \
   --port '32036:32036@server:0' \
   --port '8081:80@loadbalancer' \
   --api-port 6443 

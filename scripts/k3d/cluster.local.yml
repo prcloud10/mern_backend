@@ -1,0 +1,43 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: local
+servers: 1
+agents: 1
+kubeAPI: 
+  hostPort: "6445"
+image: registry.local/rancher/k3s:v1.28.8-k3s1-cuda-12.4.1-base-ubuntu22.04
+registries: 
+  create: 
+    name: registry.localhost
+    host: "0.0.0.0"
+    hostPort: "5000"
+ports:
+- port: 443:443
+  nodeFilters:
+  - loadbalancer
+- port: 8081:80
+  nodeFilters:
+  - loadbalancer
+- port: 32036:32036
+  nodeFilters:
+  - server:0
+options:
+  k3d: # k3d runtime settings
+    wait: true 
+    timeout: "60s" 
+    disableLoadbalancer: false 
+    disableImageVolume: false 
+    disableRollback: false 
+    loadbalancer:
+      configOverrides:
+        - settings.workerConnections=2048
+  kubeconfig:
+    updateDefaultKubeconfig: true
+    switchCurrentContext: true
+  runtime:
+    gpuRequest: all
+    ulimits:
+    - name: nofile
+      soft: 65535
+      hard: 65535
