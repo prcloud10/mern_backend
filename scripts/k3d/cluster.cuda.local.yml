@@ -6,7 +6,7 @@ servers: 1
 agents: 1
 kubeAPI: 
   hostPort: "6445"
-image: rancher/k3s:v1.30.3-k3s1
+image: registry.local/rancher/k3s:v1.28.8-k3s1-cuda-12.4.1-base-ubuntu22.04
 registries: 
   create: 
     name: registry.localhost
@@ -36,6 +36,7 @@ options:
     updateDefaultKubeconfig: true
     switchCurrentContext: true
   runtime:
+    gpuRequest: all
     ulimits:
     - name: nofile
       soft: 65535
