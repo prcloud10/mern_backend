@@ -1,9 +1,4 @@
-### Todo
-
-- [ ] Registry UI
-- [ ] MongoDB
-- [ ] K8 Ingress
-
+K3d Cluster creation scripts
 
 
 
