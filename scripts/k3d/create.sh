@@ -20,7 +20,7 @@ log_dir="logs"
 rm -rf "${log_dir:?}/"
 mkdir -p "${log_dir}"
 
-echo "creating local cluster..."
+echo "Creating local cluster..."
 k3d cluster create local \
   --config ./cluster.local.yml 
 #  1>"${log_dir}/k3s.log" \
@@ -29,26 +29,23 @@ echo " Done!"
 
 wait_for 2m
 
-#echo "installing Istio"
-#export PATH=$HOME/.istioctl/bin:$PATH
-#istioctl profile list 
-#istioctl profile dump default 
-#istioctl profile dump demo
-#istioctl install --set profile=demo -y
-#kubectl label namespace default istio-injection=enabled
-#ISTIO_VERSION=1.10.0
-#ISTIO_URL=https://github.com/istio/istio/releases/download/$ISTIO_VERSION/istio-$ISTIO_VERSION-linux-amd64.tar.gz
-#curl -L $ISTIO_URL | tar xz
-#cd istio-$ISTIO_VERSION
-#wait_for 2m
-#kubectl apply -f samples/addons
-#kubectl rollout status deployment/kiali -n istio-system
-#rm -rf ../istio-$ISTIO_VERSION
-#echo " Done!"
+echo "Installing Istio"
+helm repo add istio https://istio-release.storage.googleapis.com/charts
+helm repo update
+helm install istio-base istio/base -n istio-system --create-namespace --set defaultRevision=default
+helm install istiod istio/istiod -n istio-system --wait
+echo " Done!"
 
-echo "installing ArgoCD"
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+echo "Installing K8 Dashboard"
+helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard
+echo " Done!"
+
+
+echo "Installing ArgoCD"
+helm repo add argo https://argoproj.github.io/argo-helm
+helm install argocd argo/argo-cd --create-namespace --namespace argocd
 echo " Done!"
 
 
@@ -56,11 +53,9 @@ echo
 echo "Cluster is started up!"
 echo
 echo "The following Services are provided out of the box:"
-echo "    traefik loadbalancer"
+echo "    Traefik loadbalancer"
 echo "    Istio"
-echo "    Kiali"
-echo "    Prometheus"
-echo "    Grafana"
+echo "    ArgoCD ( user:admin and password:<get from argocd-initial-admin-secret> )"
 echo 
 echo "The system provides a registry at"
 echo "    localhost:5000"
